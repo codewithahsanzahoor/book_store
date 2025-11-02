@@ -1,0 +1,96 @@
+### User Registration
+# @name register
+POST http://localhost:3000/api/users/register
+Content-Type: application/json
+
+{
+  "name": "Test User",
+  "email": "test@example.com",
+  "password": "password123"
+}
+
+### User Login
+# @name login
+POST http://localhost:3000/api/users/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "password123"
+}
+
+### Create a new book
+# @name createBook
+POST http://localhost:3000/api/books
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="title"
+
+My Book Title
+--boundary
+Content-Disposition: form-data; name="genre"
+
+Fiction
+--boundary
+Content-Disposition: form-data; name="description"
+
+A great book about something.
+--boundary
+Content-Disposition: form-data; name="coverImage"; filename="cover.jpg"
+Content-Type: image/jpeg
+
+< /home/ahsan/Desktop/Coding/projects/book_store/backend/dummy/cover.jpg
+--boundary
+Content-Disposition: form-data; name="file"; filename="book.pdf"
+Content-Type: application/pdf
+
+< /home/ahsan/Desktop/Coding/projects/book_store/backend/dummy/book.pdf
+--boundary--
+
+### Update a book
+@bookId = {{createBook.response.body.id}}
+# @name updateBook
+PUT http://localhost:3000/api/books/{{bookId}}
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="title"
+
+Updated Book Title
+--boundary
+Content-Disposition: form-data; name="genre"
+
+Science Fiction
+--boundary
+Content-Disposition: form-data; name="coverImage"; filename="cover.jpg"
+Content-Type: image/jpeg
+
+< /home/ahsan/Desktop/Coding/projects/book_store/backend/dummy/cover.jpg
+--boundary
+Content-Disposition: form-data; name="file"; filename="book.pdf"
+Content-Type: application/pdf
+
+< /home/ahsan/Desktop/Coding/projects/book_store/backend/dummy/book.pdf
+--boundary--
+
+### Get a single book
+GET http://localhost:3000/api/books/{{bookId}}
+
+### Get all books 
+GET http://localhost:3000/api/books
+
+### Get author books
+GET http://localhost:3000/api/books/authorBooks
+
+### Get books with pagination
+POST http://localhost:3000/api/books/booksPerPages
+Content-Type: application/json
+
+{
+  "page": 1,
+  "limit": 10
+}
+
+### Delete a book
+DELETE http://localhost:3000/api/books/{{bookId}}
