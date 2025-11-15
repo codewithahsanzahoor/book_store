@@ -1,28 +1,14 @@
 import React from "react";
-import { useMutation } from "react-query";
 import { Link, useNavigate } from "react-router-dom";
-import { login } from "../http/api";
+import { useAuthStore } from "../store/authStore";
 
 function LoginPage() {
-	//? create use ref for email and password data from user input
 	const emailRef = React.useRef<HTMLInputElement>(null);
 	const passwordRef = React.useRef<HTMLInputElement>(null);
-	// console.log(emailRef, passwordRef);
-	const Navigate = useNavigate();
+	const navigate = useNavigate();
+	const { login, isLoading, error } = useAuthStore();
 
-	//? create use mutation for login in react query
-	const mutation = useMutation({
-		mutationFn: login,
-		onSuccess: (data) => {
-			// console.log("data", data);
-			// console.log("login successfully", data);
-			localStorage.setItem("token", data.token);
-			Navigate("/dashboard/home");
-		},
-	});
-
-	//? create function to handle login and send data to backend
-	const handleLoginSubmit = () => {
+	const handleLoginSubmit = async () => {
 		const email = emailRef.current?.value;
 		const password = passwordRef.current?.value;
 
@@ -30,9 +16,13 @@ function LoginPage() {
 			return alert("Please enter email and password");
 		}
 
-		//? calling use mutation function will automatically send data to mutationFn in react query
-		mutation.mutate({ email, password });
-		// console.log("data", { email, password });
+		try {
+			await login({ email, password });
+			navigate("/dashboard/home");
+		} catch (err) {
+			// Error is already handled in the store, but you can add component-specific error handling here if needed
+			console.error("Login failed:", err);
+		}
 	};
 
 	return (
@@ -84,9 +74,10 @@ function LoginPage() {
 									required
 								/>
 							</label>
+							{error && <p className="text-red-500">{error}</p>}
 							<button
 								className={
-									mutation.isLoading
+									isLoading
 										? "btn-disabled btn btn-primary mt-4 font-semibold text-xl"
 										: "btn btn-primary mt-4 font-semibold text-xl"
 								}
@@ -94,8 +85,9 @@ function LoginPage() {
 									e.preventDefault();
 									handleLoginSubmit();
 								}}
+								disabled={isLoading}
 							>
-								{mutation.isLoading && (
+								{isLoading && (
 									<span>
 										<i className="ri-loader-4-fill animate-spin"></i>
 									</span>

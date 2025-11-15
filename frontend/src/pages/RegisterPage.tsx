@@ -1,41 +1,31 @@
 import React from "react";
-import { useMutation } from "react-query";
 import { Link, useNavigate } from "react-router-dom";
-import { register } from "../http/api";
+import { useAuthStore } from "../store/authStore";
 
 function RegisterPage() {
-	//? create use ref for email and password data from user input
 	const emailRef = React.useRef<HTMLInputElement>(null);
 	const passwordRef = React.useRef<HTMLInputElement>(null);
 	const nameRef = React.useRef<HTMLInputElement>(null);
-	// console.log(emailRef, passwordRef);
-	const Navigate = useNavigate();
+	const navigate = useNavigate();
+	const { register, isLoading, error } = useAuthStore();
 
-	//? create use mutation for login in react query
-	const mutation = useMutation({
-		mutationFn: register,
-		onSuccess: (data) => {
-			// console.log("data", data);
-			// console.log("login successfully", data);
-			localStorage.setItem("token", data.token);
-			Navigate("/dashboard/home");
-		},
-	});
-
-	//? create function to handle login and send data to backend
-	const handleRegisterSubmit = () => {
+	const handleRegisterSubmit = async () => {
 		const email = emailRef.current?.value;
 		const password = passwordRef.current?.value;
 		const name = nameRef.current?.value;
 
 		if (!name || !email || !password) {
-			return alert("Please enter email and password");
+			return alert("Please enter name, email, and password");
 		}
 
-		//? calling use mutation function will automatically send data to mutationFn in react query
-		mutation.mutate({ name, email, password });
-		// console.log("data", { email, password });
+		try {
+			await register({ name, email, password });
+			navigate("/dashboard/home");
+		} catch (err) {
+			console.error("Registration failed:", err);
+		}
 	};
+
 	return (
 		<>
 			<div className="flex justify-center items-center bg-base-200 min-h-screen">
@@ -103,15 +93,14 @@ function RegisterPage() {
 									required
 								/>
 							</label>
-							{mutation.isError && (
+							{error && (
 								<p className="text-red-600 text-center my-3">
-									"something went wrong in registering please
-									try again"
+									{error}
 								</p>
 							)}
 							<button
 								className={
-									mutation.isLoading
+									isLoading
 										? "btn-disabled btn btn-primary mt-4 font-semibold text-xl"
 										: "btn btn-primary mt-4 font-semibold text-xl"
 								}
@@ -119,8 +108,9 @@ function RegisterPage() {
 									e.preventDefault();
 									handleRegisterSubmit();
 								}}
+								disabled={isLoading}
 							>
-								{mutation.isLoading && (
+								{isLoading && (
 									<span>
 										<i className="ri-loader-4-fill animate-spin"></i>
 									</span>

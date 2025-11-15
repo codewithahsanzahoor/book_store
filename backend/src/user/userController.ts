@@ -156,3 +156,8 @@ export const getAllUsers = async (
         return next(createHttpError(500, "Error while fetching users"));
     }
 };
+
+export const userLogout = (req: Request, res: Response) => {
+    res.clearCookie("token");
+    res.status(200).json({ message: "User logged out successfully" });
+};

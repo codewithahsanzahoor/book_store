@@ -1,8 +1,5 @@
 import axios from "axios";
 import { Book } from "../types";
-//TODO: USE ENV WITH VITE TO GET BACKEND URL
-//? this is how we get the api url from the .env file in the vite project for react
-// const API_BACKEND_URL = import.meta.env.API_BACKEND_URL;
 
 //? create axios instance for api request to backend
 export const api = axios.create({
@@ -14,24 +11,6 @@ export const api = axios.create({
 	withCredentials: true,
 });
 
-//? create function to send login data to backend through api using axios
-export const login = async (data: {
-	email: string;
-	password: string;
-}): Promise<{ message: string; token: string }> => {
-	const response = await api.post("/users/login", data);
-	return response.data;
-};
-
-export const register = async (data: {
-	name: string;
-	email: string;
-	password: string;
-}): Promise<{ message: string; token: string }> => {
-	const response = await api.post("/users/register", data);
-	return response.data;
-};
-
 //? this will get all the books by all the authors
 export const getBooks = async (): Promise<Book[]> => {
 	const response = await api.get("/books");
@@ -39,8 +18,8 @@ export const getBooks = async (): Promise<Book[]> => {
 };
 
 export const getBookById = async (id: string): Promise<Book> => {
-    const response = await api.get(`/books/${id}`);
-    return response.data;
+	const response = await api.get(`/books/${id}`);
+	return response.data;
 };
 
 //? this will get the books of the author only created by the author
@@ -93,11 +72,11 @@ export const getAuthorBookPagination = async (
 };
 
 export const getOrders = async (): Promise<any[]> => {
-    const response = await api.get("/orders");
-    return response.data;
+	const response = await api.get("/orders");
+	return response.data;
 };
 
 export const getUsers = async (): Promise<any[]> => {
-    const response = await api.get("/users");
-    return response.data;
+	const response = await api.get("/users");
+	return response.data;
 };
