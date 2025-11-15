@@ -10,6 +10,7 @@ const _config = {
 	cloudinary_cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
 	cloudinary_api_key: process.env.CLOUDINARY_API_KEY,
 	cloudinary_api_secret: process.env.CLOUDINARY_API_SECRET,
+	stripe_secret_key: process.env.STRIPE_SECRET_KEY,
 	frontend_url: process.env.FRONTEND_URL,
 };
 

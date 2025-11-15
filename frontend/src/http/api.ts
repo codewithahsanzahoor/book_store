@@ -12,8 +12,8 @@ export const api = axios.create({
 });
 
 //? this will get all the books by all the authors
-export const getBooks = async (): Promise<Book[]> => {
-	const response = await api.get("/books");
+export const getBooks = async (query?: string): Promise<Book[]> => {
+	const response = await api.get(`/books${query ? `?q=${query}` : ''}`);
 	return response.data;
 };
 

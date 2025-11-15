@@ -1,7 +1,22 @@
 import { Link } from "react-router-dom";
+import { useAuthStore } from "../store/authStore";
+import { useCartStore } from "../store/cartStore";
+import { useEffect } from "react";
 
 function Navbar() {
-	const isLoggedIn = false; // Placeholder for authentication status
+	const { isAuthenticated, user, logout } = useAuthStore();
+	const { cart, fetchCart, getCartTotal } = useCartStore();
+
+	useEffect(() => {
+		if (isAuthenticated) {
+			fetchCart();
+		}
+	}, [isAuthenticated, fetchCart]);
+
+	const handleLogout = async () => {
+		await logout();
+		// You might want to clear the cart here as well, depending on your app's logic
+	};
 
 	return (
 		<nav className="navbar bg-base-100 sticky top-0 z-50 shadow-md">
@@ -20,7 +35,7 @@ function Navbar() {
 					</li>
 				</ul>
 				<div className="dropdown dropdown-end">
-					<label tabIndex={0} className="btn btn-ghost btn-circle">
+					<Link to="/cart" className="btn btn-ghost btn-circle">
 						<div className="indicator">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
@@ -37,12 +52,12 @@ function Navbar() {
 								/>
 							</svg>
 							<span className="badge badge-sm indicator-item">
-								0
+								{getCartTotal()}
 							</span>
 						</div>
-					</label>
+					</Link>
 				</div>
-				{isLoggedIn ? (
+				{isAuthenticated ? (
 					<div className="dropdown dropdown-end">
 						<label
 							tabIndex={0}
@@ -51,7 +66,7 @@ function Navbar() {
 							<div className="w-10 rounded-full">
 								<img
 									alt="User Avatar"
-									src="https://picsum.photos/200"
+									src={`https://ui-avatars.com/api/?name=${user?.name}`}
 								/>
 							</div>
 						</label>
@@ -63,7 +78,7 @@ function Navbar() {
 								<Link to="/profile">My Profile</Link>
 							</li>
 							<li>
-								<a>Logout</a>
+								<a onClick={handleLogout}>Logout</a>
 							</li>
 						</ul>
 					</div>

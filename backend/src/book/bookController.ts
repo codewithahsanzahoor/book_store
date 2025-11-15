@@ -302,14 +302,30 @@ export const bookReaderAll = async (
 	res: Response,
 	next: NextFunction
 ) => {
+	const query = req.query.q as string;
+
 	try {
-		const books = await bookModel.find().populate({
+		let filter = {};
+		if (query) {
+			const regex = new RegExp(query, 'i'); // 'i' for case-insensitive
+			filter = {
+				$or: [
+					{ title: regex },
+					{ genre: regex },
+					// You might need to adjust this if author is just an ObjectId
+					// If author is populated, you can't directly query it here.
+					// A more advanced search would involve multiple queries or aggregation.
+				],
+			};
+		}
+
+		const books = await bookModel.find(filter).populate({
 			path: "author",
 			select: "name",
 		});
+
 		if (books.length === 0) {
-			const error = createHttpError(404, "No books found");
-			return next(error);
+			return res.status(200).json([]); // Return empty array if no books found
 		}
 		res.status(200).json(books);
 	} catch (error) {

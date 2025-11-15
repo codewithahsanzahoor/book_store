@@ -4,7 +4,9 @@ import cookieParser from "cookie-parser";
 import globalErrorHandler from "./middlewares/globalErrorHandler";
 import userRouter from "./user/userRouter";
 import bookRouter from "./book/bookRouter";
-import orderRouter from "./order/orderRouter"; // Import orderRouter
+import orderRouter from "./order/orderRouter";
+import cartRouter from "./cart/cartRouter"; // Import cartRouter
+import paymentRouter from "./payment/paymentRouter"; // Import paymentRouter
 
 const app = express();
 
@@ -23,7 +25,9 @@ app.get("/", (req, res) => {
 
 app.use("/api/users", userRouter);
 app.use("/api/books", bookRouter);
-app.use("/api/orders", orderRouter); // Use orderRouter
+app.use("/api/orders", orderRouter);
+app.use("/api/cart", cartRouter); // Use cartRouter
+app.use("/api/payment", paymentRouter); // Use paymentRouter
 
 app.use(globalErrorHandler);
 

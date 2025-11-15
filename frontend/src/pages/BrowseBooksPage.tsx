@@ -1,18 +1,19 @@
+import { useSearchParams } from "react-router-dom";
+import { useQuery } from "react-query";
+import { getBooks } from "../http/api";
 import FilterSidebar from "../components/FilterSidebar";
 import BookCard from "../components/BookCard";
 import Pagination from "../components/Pagination";
 
-// Placeholder data - in a real app, this would come from an API
-const books = [
-    { id: '1', title: 'The Midnight Library', author: 'Matt Haig', cover: 'https://images.unsplash.com/photo-1603831910523-5528463a04e4?q=80&w=1974&auto=format&fit=crop', price: 14.99 },
-    { id: '2', title: 'Project Hail Mary', author: 'Andy Weir', cover: 'https://images.unsplash.com/photo-1592496431122-2349e0fbc666?q=80&w=1912&auto=format&fit=crop', price: 18.50 },
-    { id: '3', title: 'Klara and the Sun', author: 'Kazuo Ishiguro', cover: 'https://images.unsplash.com/photo-1622359935345-b7c242a3341f?q=80&w=1964&auto=format&fit=crop', price: 16.00 },
-    { id: '4', title: 'The Four Winds', author: 'Kristin Hannah', cover: 'https://images.unsplash.com/photo-1586153269345-65a63a9335aa?q=80&w=1974&auto=format&fit=crop', price: 22.99 },
-    { id: '5', title: 'Crying in H Mart', author: 'Michelle Zauner', cover: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=1974&auto=format&fit=crop', price: 15.99 },
-    { id: '6', title: 'The Hill We Climb', author: 'Amanda Gorman', cover: 'https://images.unsplash.com/photo-1618665817519-e054382417e2?q=80&w=1974&auto=format&fit=crop', price: 12.99 },
-];
-
 function BrowseBooksPage() {
+    const [searchParams] = useSearchParams();
+    const query = searchParams.get('q') || '';
+
+    const { data: books, isLoading, isError } = useQuery(
+        ['books', { query }],
+        () => getBooks(query)
+    );
+
     return (
         <div className="bg-base-200">
             <div className="container mx-auto px-4 py-8">
@@ -31,15 +32,17 @@ function BrowseBooksPage() {
 
                     {/* Book Grid */}
                     <div className="lg:w-3/4">
+                        {isLoading && <div>Loading...</div>}
+                        {isError && <div>Error fetching books.</div>}
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-                            {books.map(book => (
+                            {books?.map(book => (
                                 <BookCard 
-                                    key={book.id}
-                                    id={book.id}
+                                    key={book._id}
+                                    id={book._id!}
                                     title={book.title}
-                                    author={book.author}
-                                    cover={book.cover}
-                                    price={book.price}
+                                    author={book.author?.name || 'Unknown'}
+                                    cover={book.coverImage!}
+                                    price={book.price || 0} // Assuming price is a property on your book model
                                 />
                             ))}
                         </div>
