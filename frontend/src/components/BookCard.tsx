@@ -4,16 +4,16 @@ interface BookCardProps {
     id: string;
     title: string;
     author: string;
-    cover: string;
+    coverImage: string;
     price: number;
 }
 
-function BookCard({ id, title, author, cover, price }: BookCardProps) {
+function BookCard({ id, title, author, coverImage, price }: BookCardProps) {
     return (
         <div className="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-300">
             <figure className="px-10 pt-10">
                 <Link to={`/book/${id}`}>
-                    <img src={cover} alt={`Cover of ${title}`} className="rounded-xl h-60 object-cover" />
+                    <img src={coverImage} alt={`Cover of ${title}`} className="rounded-xl h-60 object-cover" />
                 </Link>
             </figure>
             <div className="card-body items-center text-center">

@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
 import OrderModel from "./orderModel";
-import { AuthRequest } from "../../middlewares/authentication";
+import { AuthRequest } from "../middlewares/authentication";
 import Cart from "../cart/cartModel";
 import Book from "../book/bookModel";
 

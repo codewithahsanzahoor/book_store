@@ -2,12 +2,18 @@ import { NextFunction, Request, Response } from 'express';
 import createHttpError from 'http-errors';
 import Stripe from 'stripe';
 import { config } from '../config/config';
-import { AuthRequest } from '../../middlewares/authentication';
+import { AuthRequest } from '../middlewares/authentication';
 import Cart from '../cart/cartModel';
 import OrderModel from '../order/orderModel';
 
-const stripe = new Stripe(config.stripe_secret_key as string, {
-    apiVersion: '2024-06-20',
+const stripeSecretKey = config.stripe_secret_key;
+
+if (!stripeSecretKey) {
+    throw new Error('Stripe secret key is not defined. Please set STRIPE_SECRET_KEY in your environment variables.');
+}
+
+const stripe = new Stripe(stripeSecretKey, {
+    apiVersion: '2025-10-29.clover',
 });
 
 export const createPaymentIntent = async (req: Request, res: Response, next: NextFunction) => {

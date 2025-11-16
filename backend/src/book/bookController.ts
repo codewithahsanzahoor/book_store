@@ -20,9 +20,9 @@ export const createBook = async (
 			return next(error);
 		}
 
-		const { title, genre, description } = req.body;
+		const { title, genre, description, price } = req.body;
 
-		if (!title || !genre || !description) {
+		if (!title || !genre || !description || !price) {
 			const error = createHttpError(400, "All fields are required.");
 			return next(error);
 		}
@@ -96,6 +96,7 @@ export const createBook = async (
 				file: pdfUploadResult.secure_url,
 				genre: req.body.genre,
 				description: req.body.description,
+				price: req.body.price,
 				coverImagePublicId: uploadResult.public_id,
 				filePublicId: pdfUploadResult.public_id,
 			});

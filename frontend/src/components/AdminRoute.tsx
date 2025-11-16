@@ -4,23 +4,21 @@ import { useAuthStore } from '../store/authStore';
 
 const AdminRoute = () => {
     const navigate = useNavigate();
-    const { user, isAuthenticated, isLoading, fetchUserProfile } = useAuthStore();
+    const { user, isAuthenticated, isLoading, fetchUserProfile, isInitialized } = useAuthStore();
 
     useEffect(() => {
-        if (!isAuthenticated && !isLoading) {
+        if (!isInitialized) {
             fetchUserProfile();
         }
-    }, [isAuthenticated, isLoading, fetchUserProfile]);
+    }, [isInitialized, fetchUserProfile]);
 
     useEffect(() => {
-        if (!isLoading) {
-            if (!isAuthenticated || user?.role !== 'admin') {
-                navigate('/login');
-            }
+        if (isInitialized && (!isAuthenticated || user?.role !== 'admin')) {
+            navigate('/login');
         }
-    }, [isLoading, isAuthenticated, user, navigate]);
+    }, [isInitialized, isAuthenticated, user, navigate]);
 
-    if (isLoading) {
+    if (isLoading || !isInitialized) {
         return <div>Loading...</div>; // Or a spinner component
     }
 

@@ -35,6 +35,10 @@ const bookSchema = new mongoose.Schema<Book>({
 		type: String,
 		required: true,
 	},
+	price: {
+		type: Number,
+		required: true,
+	},
 });
 
 export default mongoose.model<Book>("Book", bookSchema);

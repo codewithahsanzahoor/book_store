@@ -14,6 +14,7 @@ interface AuthState {
     isAuthenticated: boolean;
     isLoading: boolean;
     error: string | null;
+    isInitialized: boolean;
     fetchUserProfile: () => Promise<void>;
     logout: () => Promise<void>;
     login: (data: LoginData) => Promise<void>;
@@ -25,13 +26,14 @@ export const useAuthStore = create<AuthState>((set) => ({
     isAuthenticated: false,
     isLoading: false,
     error: null,
+    isInitialized: false,
     fetchUserProfile: async () => {
         set({ isLoading: true, error: null });
         try {
             const response = await api.get<User>('/users/profile');
-            set({ user: response.data, isAuthenticated: true, isLoading: false });
+            set({ user: response.data, isAuthenticated: true, isLoading: false, isInitialized: true });
         } catch (error) {
-            set({ user: null, isAuthenticated: false, isLoading: false, error: 'Failed to fetch user profile' });
+            set({ user: null, isAuthenticated: false, isLoading: false, error: 'Failed to fetch user profile', isInitialized: true });
         }
     },
     logout: async () => {

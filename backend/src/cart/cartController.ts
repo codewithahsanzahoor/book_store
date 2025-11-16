@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import createHttpError from 'http-errors';
 import Cart from './cartModel';
-import { AuthRequest } from '../../middlewares/authentication';
+import { AuthRequest } from '../middlewares/authentication';
 import Book from '../book/bookModel';
 
 export const getCart = async (req: Request, res: Response, next: NextFunction) => {

@@ -11,6 +11,7 @@ export interface Book {
 	genre: string;
 	file?: string;
 	description: string;
+	price: number;
 	createdAt?: string;
 	__v?: number;
 }

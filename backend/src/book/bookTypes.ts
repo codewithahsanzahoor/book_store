@@ -11,6 +11,7 @@ export interface Book {
 	description: string;
 	coverImagePublicId: string;
 	filePublicId: string;
+	price: number;
 	createdAt: Date;
 	updatedAt: Date;
 }

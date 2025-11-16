@@ -20,7 +20,7 @@ function RegisterPage() {
 
 		try {
 			await register({ name, email, password });
-			navigate("/dashboard/home");
+			navigate("/");
 		} catch (err) {
 			console.error("Registration failed:", err);
 		}

@@ -18,7 +18,7 @@ function LoginPage() {
 
 		try {
 			await login({ email, password });
-			navigate("/dashboard/home");
+			navigate("/");
 		} catch (err) {
 			// Error is already handled in the store, but you can add component-specific error handling here if needed
 			console.error("Login failed:", err);
@@ -31,7 +31,9 @@ function LoginPage() {
 				<div className="hero-content flex-col lg:flex-row-reverse">
 					<div className="card bg-base-100 w-full max-w-md shrink-0 shadow-2xl">
 						<form className="card-body">
-							<h1 className="text-3xl font-bold text-center pb-7">Login</h1>
+							<h1 className="text-3xl font-bold text-center pb-7">
+								Login
+							</h1>
 							<label className="input input-bordered input-md flex items-center gap-2">
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
