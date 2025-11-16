@@ -308,16 +308,15 @@ export const bookReaderAll = async (
 	try {
 		let filter = {};
 		if (query) {
-			const regex = new RegExp(query, 'i'); // 'i' for case-insensitive
-			filter = {
-				$or: [
-					{ title: regex },
-					{ genre: regex },
-					// You might need to adjust this if author is just an ObjectId
-					// If author is populated, you can't directly query it here.
-					// A more advanced search would involve multiple queries or aggregation.
-				],
-			};
+			if (query.startsWith("genre=")) {
+				const genre = query.split("=")[1];
+				filter = { genre: genre };
+			} else {
+				const regex = new RegExp(query, "i"); // 'i' for case-insensitive
+				filter = {
+					$or: [{ title: regex }, { genre: regex }],
+				};
+			}
 		}
 
 		const books = await bookModel.find(filter).populate({

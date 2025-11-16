@@ -80,3 +80,13 @@ export const getUsers = async (): Promise<any[]> => {
 	const response = await api.get("/users");
 	return response.data;
 };
+
+export const getReviews = async (bookId: string): Promise<any[]> => {
+    const response = await api.get(`/reviews/${bookId}`);
+    return response.data;
+};
+
+export const createReview = async (data: { bookId: string, rating: number, comment: string }): Promise<any> => {
+    const response = await api.post('/reviews', data);
+    return response.data;
+};
