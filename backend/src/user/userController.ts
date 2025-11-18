@@ -144,6 +144,71 @@ export const userProfile = async (
 	}
 };
 
+export const updateUserProfile = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	const _req = req as AuthRequest;
+	const { name, email } = req.body;
+
+	try {
+		const user = await User.findByIdAndUpdate(
+			_req.user_id,
+			{ name, email },
+			{ new: true }
+		);
+
+		if (!user) {
+			return next(createHttpError(404, "User not found"));
+		}
+
+		res.json(user);
+	} catch (error) {
+		return next(createHttpError(500, "Error while updating user profile"));
+	}
+};
+
+export const updateUserPassword = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	const _req = req as AuthRequest;
+	const { currentPassword, newPassword } = req.body;
+
+	if (!currentPassword || !newPassword) {
+		return next(
+			createHttpError(400, "Current password and new password are required")
+		);
+	}
+
+	try {
+		const user = await User.findById(_req.user_id);
+		if (!user) {
+			return next(createHttpError(404, "User not found"));
+		}
+
+		const isPasswordCorrect = await bcrypt.compare(
+			currentPassword,
+			user.password
+		);
+
+		if (!isPasswordCorrect) {
+			return next(createHttpError(401, "Incorrect current password"));
+		}
+
+		const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+		user.password = hashedPassword;
+		await user.save();
+
+		res.json({ message: "Password updated successfully" });
+	} catch (error) {
+		return next(createHttpError(500, "Error while updating password"));
+	}
+};
+
 export const getAllUsers = async (
     req: Request,
     res: Response,

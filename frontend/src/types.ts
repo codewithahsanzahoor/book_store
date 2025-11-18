@@ -26,3 +26,21 @@ export interface RegisterData {
     email: string;
     password: string;
 }
+
+export interface OrderItem {
+    book: {
+        _id: string;
+        title: string;
+        coverImage: string;
+        price: number;
+    };
+    quantity: number;
+}
+
+export interface Order {
+    _id: string;
+    createdAt: string;
+    status: 'pending' | 'shipped' | 'delivered';
+    items: OrderItem[];
+    totalAmount: number;
+}

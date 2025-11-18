@@ -90,3 +90,21 @@ export const createReview = async (data: { bookId: string, rating: number, comme
     const response = await api.post('/reviews', data);
     return response.data;
 };
+
+export const updateUserProfile = async (data: { name: string; email: string }): Promise<any> => {
+    const response = await api.put('/users/profile', data);
+    return response.data;
+};
+
+export const getMyOrders = async (): Promise<any[]> => {
+    const response = await api.get('/orders/my-orders');
+    return response.data;
+};
+
+export const updateUserPassword = async (data: {
+	currentPassword: string,
+	newPassword: string,
+}): Promise<any> => {
+	const response = await api.put("/users/profile/password", data);
+	return response.data;
+};

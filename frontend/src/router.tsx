@@ -21,116 +21,117 @@ import CheckoutPage from "./pages/CheckoutPage";
 import OrderConfirmationPage from "./pages/OrderConfirmationPage";
 import AdminRoute from "./components/AdminRoute";
 import UsersPage from "./pages/UsersPage";
+import MyOrdersPage from "./pages/MyOrdersPage";
 
 export const router = createBrowserRouter([
-	{
-		path: "/",
-		element: <PublicLayout />,
-		children: [
-			{
-				index: true,
-				element: <PublicHomePage />,
-			},
-			{
-				path: "browse",
-				element: <BrowseBooksPage />,
-			},
-			{
-				path: "book/:id",
-				element: <BookDetailsPage />,
-			},
-			{
-				path: "cart",
-				element: <CartPage />,
-			},
-			{
-				path: "profile",
-				element: <UserAccountLayout />,
-				children: [
-					{
-						index: true,
-						element: <ProfilePage />,
-					},
-					{
-						path: "orders",
-						element: <OrdersPage />,
-					},
-				],
-			},
-		],
-	},
-	{
-		path: "/checkout",
-		element: <CheckoutLayout />,
-		children: [
-			{
-				index: true,
-				element: <CheckoutPage />,
-			},
-			{
-				path: "order-confirmation",
-				element: <OrderConfirmationPage />,
-			},
-		],
-	},
-	//? dashboard is the main layout and books is the nested layout , home is the nested layout
-	{
-		element: <AdminRoute />,
-		children: [
-			{
-				path: "/dashboard",
-				element: <DashboardLayout />,
-				children: [
-					{
-						index: true,
-						element: <HomePage />,
-					},
-					{
-						path: "books",
-						element: <BooksPage />,
-					},
-					{
-						path: "books/create",
-						element: <CreateBookPage />,
-					},
-					{
-						path: "books/update/:id",
-						element: <UpdateBookPage />,
-					},
-					{
-						path: "books/delete/:id",
-						element: <DeleteBookPage />,
-					},
-					{
-						path: "orders",
-						element: <OrdersPage />,
-					},
-					{
-						path: "users",
-						element: <UsersPage />,
-					},
-				],
-			},
-		],
-	},
-	{
-		path: "/login",
-		element: <AuthLayout />,
-		children: [
-			{
-				index: true,
-				element: <LoginPage />,
-			},
-		],
-	},
-	{
-		path: "/register",
-		element: <AuthLayout />,
-		children: [
-			{
-				index: true,
-				element: <RegisterPage />,
-			},
-		],
-	},
+    {
+        path: "/",
+        element: <PublicLayout />,
+        children: [
+            {
+                index: true,
+                element: <PublicHomePage />,
+            },
+            {
+                path: "browse",
+                element: <BrowseBooksPage />,
+            },
+            {
+                path: "book/:id",
+                element: <BookDetailsPage />,
+            },
+            {
+                path: "cart",
+                element: <CartPage />,
+            },
+            {
+                path: "profile",
+                element: <UserAccountLayout />,
+                children: [
+                    {
+                        index: true,
+                        element: <ProfilePage />,
+                    },
+                    {
+                        path: "orders",
+                        element: <MyOrdersPage />,
+                    },
+                ],
+            },
+        ],
+    },
+    {
+        path: "/checkout",
+        element: <CheckoutLayout />,
+        children: [
+            {
+                index: true,
+                element: <CheckoutPage />,
+            },
+            {
+                path: "order-confirmation",
+                element: <OrderConfirmationPage />,
+            },
+        ],
+    },
+    //? dashboard is the main layout and books is the nested layout , home is the nested layout
+    {
+        element: <AdminRoute />,
+        children: [
+            {
+                path: "/dashboard",
+                element: <DashboardLayout />,
+                children: [
+                    {
+                        index: true,
+                        element: <HomePage />,
+                    },
+                    {
+                        path: "books",
+                        element: <BooksPage />,
+                    },
+                    {
+                        path: "books/create",
+                        element: <CreateBookPage />,
+                    },
+                    {
+                        path: "books/update/:id",
+                        element: <UpdateBookPage />,
+                    },
+                    {
+                        path: "books/delete/:id",
+                        element: <DeleteBookPage />,
+                    },
+                    {
+                        path: "orders",
+                        element: <OrdersPage />,
+                    },
+                    {
+                        path: "users",
+                        element: <UsersPage />,
+                    },
+                ],
+            },
+        ],
+    },
+    {
+        path: "/login",
+        element: <AuthLayout />,
+        children: [
+            {
+                index: true,
+                element: <LoginPage />,
+            },
+        ],
+    },
+    {
+        path: "/register",
+        element: <AuthLayout />,
+        children: [
+            {
+                index: true,
+                element: <RegisterPage />,
+            },
+        ],
+    },
 ]);
