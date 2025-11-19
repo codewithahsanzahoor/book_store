@@ -12,8 +12,33 @@ export const api = axios.create({
 });
 
 //? this will get all the books by all the authors
-export const getBooks = async (query?: string): Promise<Book[]> => {
-	const response = await api.get(`/books${query ? `?q=${query}` : ''}`);
+export const getBooks = async (
+	query?: string,
+	genres?: string[],
+	price?: number,
+	page?: number,
+	limit?: number
+): Promise<{
+	books: Book[];
+	pagination: { totalPages: number; currentPage: number };
+}> => {
+	const params = new URLSearchParams();
+	if (query) {
+		params.append("q", query);
+	}
+	if (genres && genres.length > 0) {
+		params.append("genres", genres.join(","));
+	}
+	if (price) {
+		params.append("price", price.toString());
+	}
+	if (page) {
+		params.append("page", page.toString());
+	}
+	if (limit) {
+		params.append("limit", limit.toString());
+	}
+	const response = await api.get(`/books?${params.toString()}`);
 	return response.data;
 };
 
