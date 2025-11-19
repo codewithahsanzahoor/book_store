@@ -303,31 +303,46 @@ export const bookReaderAll = async (
 	res: Response,
 	next: NextFunction
 ) => {
-	const query = req.query.q as string;
-
 	try {
-		let filter = {};
-		if (query) {
-			if (query.startsWith("genre=")) {
-				const genre = query.split("=")[1];
-				filter = { genre: genre };
-			} else {
-				const regex = new RegExp(query, "i"); // 'i' for case-insensitive
-				filter = {
-					$or: [{ title: regex }, { genre: regex }],
-				};
-			}
+		const { q, genres, price, page = 1, limit = 6 } = req.query;
+
+		const filter: any = {};
+
+		if (q) {
+			const regex = new RegExp(q as string, "i"); // 'i' for case-insensitive
+			filter.title = regex;
 		}
 
-		const books = await bookModel.find(filter).populate({
-			path: "author",
-			select: "name",
+		if (genres) {
+			const genresArray = (genres as string).split(",");
+			filter.genre = { $in: genresArray };
+		}
+
+		if (price) {
+			filter.price = { $lte: Number(price) };
+		}
+
+		const pageNum = Number(page);
+		const limitNum = Number(limit);
+		const skip = (pageNum - 1) * limitNum;
+
+		const totalBooks = await bookModel.countDocuments(filter);
+		const totalPages = Math.ceil(totalBooks / limitNum);
+
+		const books = await bookModel
+			.find(filter)
+			.populate({ path: "author", select: "name" })
+			.skip(skip)
+			.limit(limitNum);
+
+		res.status(200).json({
+			books,
+			pagination: {
+				totalBooks,
+				totalPages,
+				currentPage: pageNum,
+			},
 		});
-
-		if (books.length === 0) {
-			return res.status(200).json([]); // Return empty array if no books found
-		}
-		res.status(200).json(books);
 	} catch (error) {
 		const err = createHttpError(500, "Failed to get all books: " + error);
 		return next(err);
